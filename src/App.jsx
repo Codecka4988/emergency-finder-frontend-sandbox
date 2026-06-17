@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from 'react-leaflet'; // Added ZoomControl here
 import 'leaflet/dist/leaflet.css';
+import Sidebar from './components/Sidebar';
 
 function RecenterMap({ position }) {
   const map = useMap();
@@ -40,15 +41,17 @@ function App() {
 
   return (
     <div className="relative w-screen h-screen m-0 p-0 overflow-hidden">
+      <Sidebar />
+
       {loading && (
-        <div className="absolute top-5 left-1/2 -translate-x-1/2 z-[1000] bg-white text-slate-800 font-medium px-5 py-2.5 rounded-lg shadow-xl border border-slate-100 flex items-center gap-2">
+        <div className="absolute top-5 left-1/2 -translate-x-1/2 z-[1001] bg-white text-slate-800 font-medium px-5 py-2.5 rounded-lg shadow-xl border border-slate-100 flex items-center gap-2">
           <span className="animate-spin text-blue-500">🔄</span>
           <span>Pinging browser satellite GPS coordinates...</span>
         </div>
       )}
 
       {error && (
-        <div className="absolute top-5 left-1/2 -translate-x-1/2 z-[1000] bg-rose-50 text-rose-700 font-medium px-5 py-2.5 rounded-lg shadow-lg border border-rose-200 flex items-center gap-2">
+        <div className="absolute top-5 left-1/2 -translate-x-1/2 z-[1001] bg-rose-50 text-rose-700 font-medium px-5 py-2.5 rounded-lg shadow-lg border border-rose-200 flex items-center gap-2">
           <span>⚠️</span>
           <span>{error}</span>
         </div>
@@ -57,12 +60,15 @@ function App() {
       <MapContainer 
         center={[25.4920, 81.8656]} 
         zoom={13} 
+        zoomControl={false}
         style={{ width: '100vw', height: '100vh' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
+        <ZoomControl position="bottomright" />
 
         {position && (
           <>
